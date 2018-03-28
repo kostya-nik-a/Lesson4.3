@@ -103,6 +103,7 @@ function updateTask($params = []) {
     $db = connectDB();
     $query = $db->prepare("UPDATE `task` SET `description` = :description WHERE `id` = :id");
     $query->execute([':id' => $params['id'], ':description' => $params['description']]);
+    redirect('tasks');
 }
 
 function assignTask($params = []) {
