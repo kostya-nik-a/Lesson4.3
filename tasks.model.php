@@ -38,28 +38,6 @@ function getUserTasks($user_id, $sortOfType) {
     }
 }
 
-function sortedTasksBy($sortOfType, $id) {
-    $db = connectDB();
-
-    switch ($sortOfType) {
-        case 'date_created':
-            $query = $db->query("SELECT * FROM `task` WHERE `id` = ".$id." ORDER BY `task`.`date_added` ASC");
-            $query->execute();
-            return $query->fetchAll();
-            break;
-        case 'status':
-            $query = $db->query("SELECT * FROM `task` WHERE `id` = ".$id." ORDER BY `task`.`is_done` DESC");
-            $query->execute();
-            return $query->fetchAll();
-            break;
-        case 'description':
-            $query = $db->query("SELECT * FROM `task` WHERE `id` = ".$id." ORDER BY `task`.`description` ASC");
-            $query->execute();
-            return $query->fetchAll();
-            break;
-    }
-}
-
 function getAssignedTasks($user_id) {
     $db = connectDB();
     $query = $db->prepare("SELECT a.*, b.login FROM task AS a LEFT JOIN user AS b ON (a.user_id = b.id) WHERE a.assigned_user_id = :user_id");
