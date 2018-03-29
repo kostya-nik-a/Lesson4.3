@@ -8,36 +8,24 @@ function getUserTasks($user_id, $sortOfType) {
     if (isset($sortOfType)) {
         switch ($sortOfType) {
             case 'date_created':
-                $query = $db->prepare("SELECT a.*, b.login, c.login AS assignee FROM task AS a 
-                LEFT JOIN user AS b ON (a.user_id = b.id) 
-                LEFT JOIN user AS c ON (a.assigned_user_id = c.id) 
-                WHERE a.user_id = :user_id
-                ORDER BY a.date_added ASC");
-                $query->bindParam(':user_id', $user_id, PDO::FETCH_ASSOC);
-                $query->execute();
-                return $query->fetchAll();
+                $sortOfType = 'date_added';
             break;
             case 'status':
-                $query = $db->prepare("SELECT a.*, b.login, c.login AS assignee FROM task AS a 
-                LEFT JOIN user AS b ON (a.user_id = b.id) 
-                LEFT JOIN user AS c ON (a.assigned_user_id = c.id) 
-                WHERE a.user_id = :user_id
-                ORDER BY a.is_done DESC");
-                $query->bindParam(':user_id', $user_id, PDO::FETCH_ASSOC);
-                $query->execute();
-                return $query->fetchAll();
+                $sortOfType = 'is_done';
             break;
             case 'description':
-                $query = $db->prepare("SELECT a.*, b.login, c.login AS assignee FROM task AS a 
+                $sortOfType = 'description';
+            break;
+        }
+
+        $query = $db->prepare("SELECT a.*, b.login, c.login AS assignee FROM task AS a 
                 LEFT JOIN user AS b ON (a.user_id = b.id) 
                 LEFT JOIN user AS c ON (a.assigned_user_id = c.id) 
                 WHERE a.user_id = :user_id
-                ORDER BY a.description ASC");
-                $query->bindParam(':user_id', $user_id, PDO::FETCH_ASSOC);
-                $query->execute();
-                return $query->fetchAll();
-            break;
-        }
+                ORDER BY a.".$sortOfType." ASC");
+        $query->bindParam(':user_id', $user_id, PDO::FETCH_ASSOC);
+        $query->execute();
+        return $query->fetchAll();
     }
     else {
         $query = $db->prepare("SELECT a.*, b.login, c.login AS assignee FROM task AS a 
