@@ -3,7 +3,7 @@
 require_once 'function.php';
 require_once 'users.model.php';
 
-$errorsTask = [];
+$errors = [];
 
 if (!empty($_POST['action'])) {
     switch ($_POST['action']) {
@@ -75,7 +75,7 @@ if (!empty($_POST['action'])) {
             <div class="col-xs-12">
                 <div class="form-wrap">
                     <h1>Авторизация</h1>
-                    <?php foreach ($errorsTask as $error): ?>
+                    <?php foreach ($errors as $error): ?>
                         <div class="alert alert-danger"><?= $error ?></div>
                     <?php endforeach; ?>
                     <form method="POST">
